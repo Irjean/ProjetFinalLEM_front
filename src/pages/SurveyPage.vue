@@ -1,7 +1,4 @@
 <template>
-  <!-- <header>
-    <NavBar />
-  </header> -->
     <div>
       <h1>Page de Sondage</h1>
       <SurveyForm />
@@ -24,5 +21,5 @@
 </script>
   
 <style scoped>
-
+  
 </style>
