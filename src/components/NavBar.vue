@@ -14,8 +14,9 @@
 
 <style scoped>
   header{
+    background-color: var(--body-color);
     width: 100dvw;
-    height: 15dvh;
+    min-height: 15dvh;
     display: flex;
     align-items: center;
     justify-content: center;

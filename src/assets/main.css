@@ -1,9 +1,27 @@
 @import './base.css';
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200&display=swap');
 
 *{
+  font-family: 'Work Sans';
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+
+}
+
+
+
+:root{
+  --primary-color: #4D1EF7;
+  --primary-dark-color: #451CDE;
+  --primary-light-color: #F6F4FF;
+  --body-color: #000;
+  
+  --gray-color: #787E81;
+  --gray-300-color: #DFDFDF;
+  /* --shadow-bg-color: rgba(5, 0, 51, 0.08);
+  --shadow-sm-color: rgba(10, 0, 36, 0.08); */
+  --btn-color : var(--primary-color);
 }
 
 #app {
@@ -27,21 +45,24 @@ main{
 }
 
 a,
-.green {
+.indigo {
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
+  color: var(--primary-color);
   transition: 0.4s;
 }
 
 @media (hover: hover) {
   a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+    color: var(--primary-dark-color);
   }
 }
 
 @media (min-width: 1024px) {
   body {
+    background-color: var(--gray-300-color);
+    color: var(--body-color);
     display: flex;
     place-items: center;
   }
 }
+
