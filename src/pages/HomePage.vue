@@ -22,12 +22,23 @@ export default {
   name: "HomePage",
   components: {
     NavBar
-  }
+  },
+  // mounted() {
+  //   document.querySelector("header").display=none;
+  // }
 }
+
 
 </script>
 
+<style>
+  
+</style>
+
 <style scoped>
+header {
+    display: none !important;
+  }
 .greetings{
   display: flex;
   align-items: center;
