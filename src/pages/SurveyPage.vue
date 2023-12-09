@@ -1,19 +1,22 @@
 <template>
     <div class="container">
       <h1>Page de Sondage</h1>
+      <p>Merci de répondre à toutes les questions et de valider le formulaire en bas de page.</p>
       
       <form action="http://127.0.0.1/submit_survey" class="form-survey" v-if="!loading">
-        <SurveyQuestion
-          v-for="(question,index) in questions"
-          :key="index"
-          :index="index"
-          :question="question"
-          :questionCount="questionCount"
-          @answerChanged="validateQuestion(index)"
-        />
+        <div v-for="(question,index) in questions">
+          <SurveyQuestion
+            :key="index"
+            :index="index"
+            :question="question"
+            :questionCount="questionCount"
+            @question-answered="handleQuestionAnswered"
+          />
+        </div>
+        <button @click.prevent="submitSurvey" :disabled="!allQuestionsAnswered" class="button-large" :class=" {'btn-disabled': !allQuestionsAnswered}" type="submit"><img src="/picto/send.png" alt="logo">Envoyer</button>
       </form>
       
-      <button @click="submitSurvey" class="button-large"><img src="src/assets/picto/send.png">Envoyer</button>
+      
 
       <div v-if="showOverlay" class="overlay" @click="closeOverlay">
         <div v-if="showMessage" class="popup show">
@@ -23,7 +26,7 @@
           <br>
           Si vous désirez consulter vos réponse ultérieurement, vous pouvez consultez cette adresse: 
           <br>
-          URL getResponses
+          URL postResponses
           </p>
         </div>
       </div>
@@ -48,6 +51,8 @@ export default {
       questionCount: 0,
       showMessage: false,
       showOverlay: false,
+      allQuestionsAnswered: false,
+      answers: [],
     };
   },
 
@@ -60,12 +65,26 @@ export default {
       axios.get('/api/questions')
       .then(response => {
         this.questions = response.data;
+        window.console.log(this.questions);
         this.loading = false;
         this.questionCount = this.questions.length;
+        
       })
       .catch(error => {
         console.error('Erreur lors de la récupération des questions du sondage', error);
       });
+    },
+
+    handleQuestionAnswered(answer) {
+      if(answer.error) {
+        this.answers[answer.number-1] = false;
+      } else {
+        this.answers[answer.number-1] = answer;
+      }
+      console.log(this.answers);
+      console.log(this.questionCount);
+      let answerErrors = this.answers.filter(answer => answer === false);
+      this.allQuestionsAnswered = answerErrors.length === 0 && Object.keys(this.answers).length === this.questionCount
     },
 
     submitSurvey() {
@@ -109,10 +128,6 @@ h1{
     padding-bottom: 4rem;
   }
 
-  /* .form-survey {
-    gap: 3rem;
-  } */
-
   .popup {
     position: fixed;
     top: 50%;
@@ -129,6 +144,7 @@ h1{
 }
   .popup.show {
     opacity: 1;
+    color: black;
   }
   .popup .close { 
     position: relative; 
@@ -147,6 +163,14 @@ h1{
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 999; 
+  }
+
+  .btn-disabled {
+    background-color: #333;
+  }
+
+  .btn-disabled:hover {
+    background-color: #333;
   }
   
 </style>
