@@ -3,17 +3,16 @@
       <h1>Page de Sondage</h1>
       <p>Merci de répondre à toutes les questions et de valider le formulaire en bas de page.</p>
       
-      <form action="http://127.0.0.1/submit_survey" class="form-survey" v-if="!loading">
+      <form action="http://127.0.0.1/submit_survey" class="form-survey">
         <div v-for="(question,index) in questions">
           <SurveyQuestion
             :key="index"
             :index="index"
             :question="question"
-            :questionCount="questionCount"
-            @question-answered="handleQuestionAnswered"
+            :questionCount="questions.length"
           />
         </div>
-        <button @click.prevent="submitSurvey" :disabled="!allQuestionsAnswered" class="button-large" :class=" {'btn-disabled': !allQuestionsAnswered}" type="submit"><img src="/picto/send.png" alt="logo">Envoyer</button>
+        <button @click.prevent="submitSurvey" :disabled="allQuestionsAnswered" class="button-large" :class=" {'btn-disabled': !allQuestionsAnswered}" type="submit"><img src="/picto/send.png" alt="logo">Envoyer</button>
       </form>
       
       
@@ -22,7 +21,7 @@
         <div v-if="showMessage" class="popup show">
           <a @click="closeMessage" class="close" href="#popup1">×</a>
 
-          <p>Toute l’équipe de Bigscreen vous remercie pour votre engagement. Grâce à votre investissement, nous vous préparons une application toujours plus facile à utiliser, seul ou en famille. 
+          <p>Toute l'équipe de Bigscreen vous remercie pour votre engagement. Grâce à votre investissement, nous vous préparons une application toujours plus facile à utiliser, seul ou en famille. 
           <br>
           Si vous désirez consulter vos réponse ultérieurement, vous pouvez consultez cette adresse: 
           <br>
@@ -34,8 +33,67 @@
       
     </div>
 </template>
+
+<script setup>
+import SurveyQuestion from '../components/survey/SurveyQuestion.vue';
+import axios from 'axios';
+import { ref, onMounted, watch } from "vue";
+import { useAnswerStore } from "../stores/answer";
+
+let loading = ref(true);
+let questions = ref([]);
+let showMessage = ref(false);
+let showOverlay = ref(false);
+let allQuestionsAnswered = ref(false);
+
+const store = useAnswerStore();
+
+onMounted(() => {
+  store.$reset();
+  axios.get("sanctum/csrf-cookie");
+  fetchQuestions();
+});
+
+function fetchQuestions(){
+  axios.get('/api/questions')
+  .then(response => questions.value = response.data)
+  .catch(error => {
+    console.error('Erreur lors de la récupération des questions du sondage', error);
+  });
+}
+
+function submitSurvey() {
+  // Logique pour traiter les réponses du sondage (axios...)
+
+  const arr = store.answers.filter(n => n);
+  axios.post("/api/test", {
+    answers: arr
+  })
+  .then(res => console.log(res));
+
+}
+
+function handleQuestionAnswered(answer) {
+  if(answer.error) {
+    answers[answer.number-1] = false;
+  } else {
+    answers[answer.number-1] = answer;
+  }
+  console.log(answers);
+  console.log(questionCount);
+  let answerErrors = answers.filter(answer => answer === false);
+  allQuestionsAnswered = answerErrors.length === 0 && Object.keys(answers).length === questionCount
+}
+
+function closeMessage() {
+  showOverlay = false;
+  showMessage = false; 
+}
+
+</script>
   
 <script>
+/*
 import SurveyQuestion from '../components/survey/SurveyQuestion.vue';
 import axios from 'axios';
   
@@ -90,11 +148,8 @@ export default {
     submitSurvey() {
       // Logique pour traiter les réponses du sondage (axios...)
 
-      // Afficher la overlay
-      this.showOverlay = true;
+      const form = document.querySelector("form");
 
-      // Afficher le popup
-      this.showMessage = true;
     },
     closeOverlay() {
       // Fermer la div overlay
@@ -106,7 +161,7 @@ export default {
       this.showMessage = false; 
     },
   },
-};
+};*/
 </script>
   
 <style scoped>
