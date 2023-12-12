@@ -18,9 +18,11 @@
   
   --gray-color: #787E81;
   --gray-300-color: #DFDFDF;
-  /* --shadow-bg-color: rgba(5, 0, 51, 0.08);
-  --shadow-sm-color: rgba(10, 0, 36, 0.08); */
-  --btn-color : var(--primary-color);
+  --shadow-bg-color: rgba(5, 0, 51, 0.08);
+  --shadow-sm-color: rgba(10, 0, 36, 0.08);
+  --btn-color: var(--primary-color);
+
+  --error-color: #d60404;
 }
 
 #app {
@@ -35,6 +37,13 @@
   font-weight: normal;
 }
 
+body {
+  background-color: var(--gray-300-color);
+  color: var(--body-color);
+  display: flex;
+  place-items: center;
+}
+
 main{
   min-height: 85dvh;
   width: 100dvw;
@@ -43,26 +52,13 @@ main{
   justify-content: center;
 }
 
-a,
-.indigo {
-  text-decoration: none;
+a {
   color: var(--primary-color);
+  font-weight: 500;
+}
+a:hover {
+  color: var(--primary-dark-color);
   transition: 0.4s;
-}
-
-@media (hover: hover) {
-  a:hover {
-    color: var(--primary-dark-color);
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    background-color: var(--gray-300-color);
-    color: var(--body-color);
-    display: flex;
-    place-items: center;
-  }
 }
 
 .button-large {
@@ -82,7 +78,9 @@ a,
 }
 .button-large:hover {
   background-color: var(--primary-dark-color);
+  transition: 0.4s;
 }
 .button-large img {
   width: 1.5rem;
 }
+
