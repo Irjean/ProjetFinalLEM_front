@@ -3,10 +3,10 @@
       <h1>Page de Sondage</h1>
       <p>Merci de répondre à toutes les questions et de valider le formulaire en bas de page.</p>
       
-      <form action="http://127.0.0.1/submit_survey" id="survey-form" class="form-survey" v-if="!loading">
-        <div v-for="(question,index) in questions">
+      <form action="http://127.0.0.1/submit_survey" id="survey-form" class="form-survey">
+        <div v-for="(question,index) in questions" :key="index">
           <SurveyQuestion
-            :key="index"
+            
             :index="index"
             :question="question"
             :questionCount="questions.length"
