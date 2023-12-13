@@ -76,7 +76,7 @@ function submitSurvey() {
   // Logique pour traiter les réponses du sondage (axios...)
 
   const arr = store.answers.filter(n => n);
-  axios.post("/api/test", {
+  axios.post("/api/answer", {
     answers: arr
   })
   .then(res => console.log(res));
