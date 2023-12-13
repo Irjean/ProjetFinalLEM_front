@@ -7,13 +7,14 @@
 
         <div class="form-answer-text">
             <div  v-if="question.type == 'A'" class="dotted">
-                <div v-for="choice in this.choices" class="form-check">
-                    <input :id="'type-a-' + index + '-' + this.choices.indexOf(choice)" :name="'type-a-' + index + '-' + this.choices.indexOf(choice)" v-model="selectedValue" :value="choice" type="radio" class="form-check-input" required>
-                    <label :for="'type-a-' + index + '-' + this.choices.indexOf(choice)">{{ choice }}</label>
+                <div v-for="(choice, ind) in choices" class="form-check">
+                    <input :id="ind + 'question' + (index + 1)" :name="ind + 'question' + (index + 1)" v-model="selectedValue" :value="choice" type="radio" class="form-check-input" required>
+                    <label :for="ind + 'question' + (index + 1)">{{ choice }}</label>
                 </div>
             </div>
             
             <input 
+            :id="'question' + (index + 1)"
             type="text"
             v-if="question.type == 'B' && question.content !=='Votre email'  && question.content !=='Votre âge'"
             v-model="selectedValue" 
@@ -26,6 +27,7 @@
             </div>
             
             <input 
+            :id="'question' + (index + 1)"
             :type=" question.content == 'Votre email' ? 'email' : 'text' " 
             v-if="question.type == 'B' && question.content =='Votre email'"
             v-model="selectedValue" 
@@ -38,47 +40,48 @@
             </div>
 
             <input 
+            :id="'question' + (index +1)"
             type="text" 
-            @keyup="checkNumber(event)" 
             v-model="selectedValue" 
+            @keypress="typeNumber($event)"
             v-if="question.content == 'Votre âge'" 
             class="form-control" 
             required
             >
             <div v-if="question.content == 'Votre âge'" class="error-message">
-                <p v-if="ageError" class="error-text">Veuillez entrer l'âge correct</p>
+                <p v-show="!checkNumber()" class="error-text">Veuillez rentrer un âge valide.</p>
             </div>
 
-            <div type="number" v-if="question.type == 'C'" class="number-answer" >
-                <div v-if="question.content.includes('Aimeriez') && question.content.includes('vous')" class="label-note">
+            
+            
+            <div :id="'question' + index +1" type="number" v-if="question.type == 'C'" class="number-answer" >
+                <div v-if="question.content.includes('Aimeriez') && question.content.includes('vous')">
                     Pas du tout d'accord
                 </div>
 
-                <div class="number-answer-option">
-                    <div>
-                        <input :id="'type-c-1-' + index" v-model="selectedValue" value="1" :name="'type-c-' + index" type="radio" class="form-check-input">
-                        <label :for="'type-c-1-' + index">1</label>
-                    </div>
+                <div>
+                    <input :id="'type-c-1-' + index" v-model="selectedValue" value="1" :name="'question' + (index+1)" type="radio" class="form-check-input" required>
+                    <label :for="'type-c-1-' + index">1</label>
+                </div>
 
-                    <div>
-                        <input :id="'type-c-2-' + index" v-model="selectedValue" value="2" :name="'type-c-' + index" type="radio" class="form-check-input">
-                        <label :for="'type-c-2-' + index">2</label>
-                    </div>
+                <div>
+                    <input :id="'type-c-2-' + index" v-model="selectedValue" value="2" :name="'question' + (index+1)" type="radio" class="form-check-input">
+                    <label :for="'type-c-2-' + index">2</label>
+                </div>
 
-                    <div>
-                        <input :id="'type-c-3-' + index" v-model="selectedValue" value="3" :name="'type-c-' + index" type="radio" class="form-check-input">
-                        <label :for="'type-c-3-' + index">3</label>
-                    </div>
+                <div>
+                    <input :id="'type-c-3-' + index" v-model="selectedValue" value="3" :name="'question' + (index+1)" type="radio" class="form-check-input">
+                    <label :for="'type-c-3-' + index">3</label>
+                </div>
 
-                    <div>
-                        <input :id="'type-c-4-' + index" v-model="selectedValue" value="4" :name="'type-c-' + index" type="radio" class="form-check-input">
-                        <label :for="'type-c-4-' + index">4</label>
-                    </div>
+                <div>
+                    <input :id="'type-c-4-' + index" v-model="selectedValue" value="4" :name="'question' + (index+1)" type="radio" class="form-check-input">
+                    <label :for="'type-c-4-' + index">4</label>
+                </div>
 
-                    <div>
-                        <input :id="'type-c-5-' + index" v-model="selectedValue" value="5" :name="'type-c-' + index" type="radio" class="form-check-input">
-                        <label :for="'type-c-5-' + index">5</label>
-                    </div>
+                <div>
+                    <input :id="'type-c-5-' + index" v-model="selectedValue" value="5" :name="'question' + (index+1)" type="radio" class="form-check-input">
+                    <label :for="'type-c-5-' + index">5</label>
                 </div>
                 
                 
@@ -90,86 +93,79 @@
     </div>
 
 </template>
-  
-<script>
-import axios from 'axios';
 
-    export default {
-        name: "SurveyQuestion",
-        props: {
-            question: Object,
-            questionCount: Number,
-            index: Number,
-        },
-        data() {
-            return {
-                choices: JSON.parse(this.question.choices),
-                ageError: false,
-                emailError: false,
-                textFieldError: false,
-                selectedValue: null,
-            };
-        },
-        methods: {
-            checkNumber: function (event) {
-                if (isNaN(this.selectedValue) || this.selectedValue <= 0 || this.selectedValue >120) {
-                    this.ageError = true;
-                } else {
-                    this.ageError = false;
-                }
-                this.checkAnswered();
-            },
+<script setup>
+import { ref, watch } from "vue";
+import { useAnswerStore } from "../../stores/answer";
 
-            checkEmail: function () {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const props = defineProps([
+    "question",
+    "questionCount",
+    "index"
+]);
 
-                if (!emailRegex.test(this.selectedValue)) {
-                    this.emailError = true;
-                }else {
-                    this.emailError = false;
-                }
-                this.checkAnswered();
-            },
+const store = useAnswerStore();
 
-            checkField: function () {
-                if(this.selectedValue === ''){
-                    this.textFieldError = true;
-                } else {
-                    this.textFieldError = false;
-                }
-                this.checkAnswered();
-            },
+let ageError = ref(true);
+let emailError = ref(false);
+let textFieldError = ref(false);
+let selectedValue = ref("");
+let choices = ref(JSON.parse(props.question.choices));
+
+watch(selectedValue, (newValue) => {
+    if(newValue.length < 1){
+        return
+    }
+
+    store.addAnswer(props.question.id, selectedValue);
+})
+
+function checkEmail () {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    if (!emailRegex.test(selectedValue.value)) {
+        emailError = true;
+    }else {
+        emailError = false;
+    }
+}
+
+function typeNumber(evt){
+    let charCode = (evt.which) ? evt.which : evt.keyCode;
+    if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();
+    }
+}
+
+function checkNumber () {
+    if(selectedValue.value == ""){
+        return true;
+    }
+    return Number(selectedValue.value) > 5 && Number(selectedValue.value) < 120;
+    
+}
 
 
-            checkAnswered: function() {
-                //console.log(this.question.type);
-                let error = true;
-                if(this.selectedValue !== null && this.selectedValue !== '' && typeof this.selectedValue !== 'undefined' && this.ageError === false && this.emailError === false && this.textFieldError === false) {
-                    error = false;
-                } else {
-                    error = true;
-                }
+function checkField () {
+    if(selectedValue === ''){
+        textFieldError = true;
+    } else {
+        textFieldError = false;
+    }
+    checkAnswered();
+}
 
-                this.$emit('question-answered', {
-                    error: error,
-                    questionId: this.question.id,
-                    number: this.index + 1,
-                    // type: this.question.type,
-                    // label: this.question.content,
-                    answerValue: this.selectedValue
-                });
-            },
-        },
-        watch: {
-            selectedValue(currentVal) {
-                //console.log('Question:' + (this.index+1) + '- Valeur du choix: ', currentVal);
-                if(this.question.type === 'C' || this.question.type === 'A') {
-                    this.checkAnswered();
-                }
-            },
-        },
-    };
-  
+
+function checkAnswered () {
+    let error = true;
+    if(selectedValue !== null && selectedValue !== '' && typeof selectedValue !== 'undefined' && ageError === false && emailError === false && textFieldError === false) {
+        error = false;
+    } else {
+        error = true;
+    }
+    
+}
+
 </script>
 
 <style scoped>
