@@ -12,18 +12,18 @@
             :questionCount="questions.length"
           />
         </div>
-        <button @click.prevent="submitSurvey" :disabled="allQuestionsAnswered" class="button-large" :class=" {'btn-disabled': !allQuestionsAnswered}" type="submit"><img src="/picto/send.png" alt="logo">Envoyer</button>
+       
+        <button @click.prevent="submitSurvey" 
+          :disabled="allQuestionsAnswered" 
+          id="survey-btn" 
+          class="button-large" 
+          :class=" {'btn-disabled': !allQuestionsAnswered}" 
+          type="submit">
+          <img src="/picto/send.png" alt="logo">
+          Envoyer
+        </button>
       </form>
 
-      <button @click.prevent="submitSurvey" 
-        :disabled="allQuestionsAnswered" 
-        id="survey-btn" 
-        class="button-large" 
-        :class=" {'btn-disabled': !allQuestionsAnswered}" 
-        type="submit">
-        <img src="/picto/send.png" alt="logo">
-        Envoyer
-      </button>
       
       
 
