@@ -6,13 +6,13 @@
             <nav>
                 <ul>
                     <li>
-                        <router-link to="/admin">Accueil</router-link>
+                        <router-link to="/administration">Accueil</router-link>
                     </li>
                     <li>
-                        <router-link to="#">Questionnaire</router-link>
+                        <router-link to="/administration/questionnaire">Questionnaire</router-link>
                     </li>
                     <li>
-                        <router-link to="#">Réponses</router-link>
+                        <router-link to="/administration/reponses">Réponses</router-link>
                     </li>
                 </ul>
             </nav>
