@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header id="main-header" v-if="store.isNavbarVisible">
     <nav class="navbar navbar-expand navbar-light">
       <div class="container">
         <router-link to="/" class="navbar-brand">
@@ -12,8 +12,16 @@
   </header>
 </template>
 
+<script setup>
+import { useNavbarStore } from '../stores/navbar';
+
+const store = useNavbarStore();
+
+</script>
+
 <style>
-  header{
+/* Navbar principal */
+  #main-header{
     background-color: var(--body-color);
     width: 100dvw;
     min-height: 15dvh;
@@ -23,11 +31,11 @@
   }
 
 
-  nav a {
+  #main-header nav a {
     display: flex;
     justify-content: center;
   }
-  nav img {
+  #main-header nav img {
     width: 90%;
   }
 
