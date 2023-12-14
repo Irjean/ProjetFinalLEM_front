@@ -18,7 +18,7 @@
 <script setup>
     import { onMounted, ref } from "vue";
     import axios from "axios";
-    import router from "../router.js";
+    import router from "../../router.js";
 
     const email = ref();
     const password = ref();

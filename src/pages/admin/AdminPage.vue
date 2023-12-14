@@ -29,9 +29,9 @@
 </template>
 
 <script setup>
-import AdminNavBar from "../components/AdminNavBar.vue";
+import AdminNavBar from "../../components/AdminNavBar.vue";
 import { onMounted, ref } from "vue";
-import { useNavbarStore } from "../stores/navbar";
+import { useNavbarStore } from "../../stores/navbar";
 import { Chart as ChartJS, Title, CategoryScale, ArcElement, Tooltip, Legend, Filler, LineElement, PointElement, RadialLinearScale } from 'chart.js';
 import { Pie, Radar } from 'vue-chartjs';
 import axios from "axios";
