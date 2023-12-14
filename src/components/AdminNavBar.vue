@@ -1,7 +1,7 @@
 <template>
     <section id="admin-sidebar">
         <div class="nav-container">
-            <img src="public/bigscreen.svg" alt="Bigscreen logo">
+            <img src="/bigscreen.svg" alt="Bigscreen logo">
             <div class="stick"></div>
             <nav>
                 <ul>

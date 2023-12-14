@@ -102,85 +102,6 @@ function closeMessage() {
 
 </script>
   
-<script>
-/*
-import SurveyQuestion from '../components/survey/SurveyQuestion.vue';
-import axios from 'axios';
-  
-export default {
-  components: {
-    SurveyQuestion
-  },
-
-  data(){
-    return {
-      loading: true,
-      questions: [],
-      questionCount: 0,
-      showMessage: false,
-      showOverlay: false,
-      allQuestionsAnswered: false,
-      answers: [],
-    };
-  },
-
-  mounted(){
-    this.fetchQuestions();
-  },
-
-  methods: {
-    fetchQuestions(){
-      axios.get('/api/questions')
-      .then(response => {
-        this.questions = response.data;
-        window.console.log(this.questions);
-        this.loading = false;
-        this.questionCount = this.questions.length;
-        
-      })
-      .catch(error => {
-        console.error('Erreur lors de la récupération des questions du sondage', error);
-      });
-    },
-
-    handleQuestionAnswered(answer) {
-      if(answer.error) {
-        this.answers[answer.number-1] = false;
-      } else {
-        this.answers[answer.number-1] = answer;
-      }
-
-      let answerErrors = this.answers.filter(answer => answer === false);
-      this.allQuestionsAnswered = answerErrors.length === 0 && Object.keys(this.answers).length === this.questionCount
-    },
-
-    submitSurvey() {
-      // Logique pour traiter les réponses du sondage (axios...)
-      // const form = document.getElementById("survey-form");
-      // const formBtn = document.getElementById("survey-btn");
-      // const formData = new FormData(form, formBtn);
-
-      // for(const [key, value] of formData){
-      //   console.log(key + " " + value)
-      // }
-
-
-      const form = document.querySelector("form");
-
-    },
-    closeOverlay() {
-      // Fermer la div overlay
-      this.showOverlay = false;
-      this.showMessage = false;
-    },
-    closeMessage() {
-      this.showOverlay = false;
-      this.showMessage = false; 
-    },
-  },
-};*/
-</script>
-  
 <style scoped>
   
   h1{
@@ -197,7 +118,11 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 3rem;
-    padding-bottom: 4rem;
+    padding: 50px 0
+  }
+
+  form{
+    padding-bottom: 50px;
   }
 
   .popup {

@@ -3,7 +3,7 @@
     <nav class="navbar navbar-expand navbar-light">
       <div class="container">
         <router-link to="/" class="navbar-brand">
-          <img alt="Bigscreen logo" class="logo" src="public/bigscreen.svg" />
+          <img alt="Bigscreen logo" class="logo" src="../assets/bigscreen.svg" />
         </router-link>
         <div class="collapse navbar-collapse">
         </div>
@@ -30,13 +30,18 @@ const store = useNavbarStore();
     justify-content: center;
   }
 
+  #main-header nav, .container, .container a{
+    width: 100%;
+    height: 100%;
+  }
+
 
   #main-header nav a {
     display: flex;
     justify-content: center;
   }
   #main-header nav img {
-    width: 90%;
+    width: 30%;
   }
 
  /* Desktop */
