@@ -4,12 +4,12 @@
       <p>Merci de répondre à toutes les questions et de valider le formulaire en bas de page.</p>
       
       <form action="http://127.0.0.1/submit_survey" id="survey-form" class="form-survey">
-        <div v-for="(question,index) in questions" :key="index">
+        <div v-for="(question,index) in storeQuestion.questions" :key="index">
           <SurveyQuestion
             
             :index="index"
             :question="question"
-            :questionCount="questions.length"
+            :questionCount="storeQuestion.questions.length"
           />
         </div>
        
@@ -48,7 +48,9 @@
 import SurveyQuestion from '../components/survey/SurveyQuestion.vue';
 import axios from 'axios';
 import { ref, onMounted, watch } from "vue";
+import { useNavbarStore } from "../stores/navbar";
 import { useAnswerStore } from "../stores/answer";
+import { useQuestionStore } from '../stores/question';
 
 let loading = ref(true);
 let questions = ref([]);
@@ -56,17 +58,25 @@ let showMessage = ref(false);
 let showOverlay = ref(false);
 let allQuestionsAnswered = ref(false);
 
-const store = useAnswerStore();
+const storeNavbar = useNavbarStore();
+const storeQuestion = useQuestionStore();
+const storeAnswer = useAnswerStore();
 
 onMounted(() => {
-  store.$reset();
+  storeNavbar.showNavbar();
+  storeAnswer.formAnswers = [];
   axios.get("sanctum/csrf-cookie");
-  fetchQuestions();
+  if(!storeQuestion.isFetched){
+    fetchQuestions();
+  }
 });
 
 function fetchQuestions(){
   axios.get('/api/questions')
-  .then(response => questions.value = response.data)
+  .then(response => {
+    storeQuestion.questions = response.data;
+    storeQuestion.isFetched = true;
+  })
   .catch(error => {
     console.error('Erreur lors de la récupération des questions du sondage', error);
   });
@@ -75,7 +85,7 @@ function fetchQuestions(){
 function submitSurvey() {
   // Logique pour traiter les réponses du sondage (axios...)
 
-  const arr = store.answers.filter(n => n);
+  const arr = storeAnswer.formAnswers.filter(n => n);
   axios.post("/api/answer", {
     answers: arr
   })

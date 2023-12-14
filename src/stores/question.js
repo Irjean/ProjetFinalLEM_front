@@ -1,16 +1,15 @@
 import { defineStore } from 'pinia'
 
-export const useAnswerStore = defineStore('answer', {
+export const useQuestionStore = defineStore('question', {
   state: () => {
     return {
-        answers : [],
-        formAnswers: [],
-        isFetched: false,
+        questions : [],
+        isFetched: false
     }
   },
   actions: {
     addAnswer(question_id, answer) {
-      this.formAnswers[question_id] = {
+      this.question[question_id] = {
         question_id,
         answer,
       }

@@ -32,11 +32,15 @@
 import AdminNavBar from "../../components/AdminNavBar.vue";
 import { onMounted, ref } from "vue";
 import { useNavbarStore } from "../../stores/navbar";
+import { useQuestionStore } from "../../stores/question";
+import { useAnswerStore } from "../../stores/answer";
 import { Chart as ChartJS, Title, CategoryScale, ArcElement, Tooltip, Legend, Filler, LineElement, PointElement, RadialLinearScale } from 'chart.js';
 import { Pie, Radar } from 'vue-chartjs';
 import axios from "axios";
 
-const store = useNavbarStore();
+const storeNavbar = useNavbarStore();
+const storeQuestion = useQuestionStore();
+const storeAnswer = useAnswerStore();
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, Filler, Tooltip, LineElement, PointElement, RadialLinearScale);
 
@@ -130,24 +134,34 @@ let chartTitles = ref({
 })
 
 onMounted(async () => {
-    store.hideNavbar();
-    await getQuestions();
-    await getAnswers();
+    storeNavbar.hideNavbar();
+    if(!storeQuestion.isFetched){
+        await getQuestions();
+    }
+    if(!storeAnswer.isFetched){
+        await getAnswers();
+    }
     sortAnswers();
 })
 
 async function getQuestions(){
     await axios("/api/questions")
-    .then(res => questions = res.data);
+    .then(res => {
+        storeQuestion.questions = res.data;
+        storeQuestion.isFetched = true;
+    });
 }
 
 async function getAnswers(){
     await axios("/api/answer/all")
-    .then(res => answers = res.data);
+    .then(res => {
+        storeAnswer.answers = res.data;
+        storeAnswer.isFetched = true;
+    });
 }
 
 function sortAnswers(){
-    questions.forEach(question => {
+    storeQuestion.questions.forEach(question => {
         switch(question.id){
             case 6:
                 dataQuestion6.value.labels = JSON.parse(question.choices); 
@@ -163,7 +177,7 @@ function sortAnswers(){
         }
     });
     
-    answers.forEach(answer => {
+    storeAnswer.answers.forEach(answer => {
         switch(answer.question_id){
             case 6:
                 isNaN(chartData.value.question6[dataQuestion6.value.labels.indexOf(answer.content)]) ? chartData.value.question6[dataQuestion6.value.labels.indexOf(answer.content)] = 0 : chartData.value.question6[dataQuestion6.value.labels.indexOf(answer.content)] = chartData.value.question6[dataQuestion6.value.labels.indexOf(answer.content)] + 1;
@@ -208,11 +222,11 @@ function sortAnswers(){
 
 </script>
 
-<style scoped>
+<style>
     #admin-container{
         display: flex;
         flex-direction: row;
-        min-height: 100dvh;
+        height: 100dvh;
         min-width: 100vw;
     }
 
