@@ -6,10 +6,10 @@
       <form action="http://127.0.0.1/submit_survey" id="survey-form" class="form-survey">
         <div v-for="(question,index) in questions" :key="index">
           <SurveyQuestion
-            
             :index="index"
             :question="question"
             :questionCount="questions.length"
+            @question-answered="handleQuestionAnswered"
           />
         </div>
        
@@ -24,9 +24,6 @@
         </button>
       </form>
 
-      
-      
-
       <div v-if="showOverlay" class="overlay" @click="closeOverlay">
         <div v-if="showMessage" class="popup show">
           <a @click="closeMessage" class="close" href="#popup1"><i class="bi bi-x-lg"></i></a>
@@ -35,7 +32,7 @@
           <br>
           Si vous désirez consulter vos réponse ultérieurement, vous pouvez consultez cette adresse: 
           <br>
-          URL postResponses
+          <router-link to="/answer/:id">Consultez votre réponses</router-link>
           </p>
         </div>
       </div>
@@ -79,8 +76,7 @@ function submitSurvey() {
   axios.post("/api/answer", {
     answers: arr
   })
-  .then(res => console.log(res));
-
+  .then(res => {console.log(res)});
 }
 
 function handleQuestionAnswered(answer) {
