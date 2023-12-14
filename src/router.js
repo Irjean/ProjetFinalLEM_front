@@ -2,8 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from './pages/HomePage.vue'
 import SurveyPage from './pages/SurveyPage.vue'
 import ResponsePage from './pages/ResponsePage.vue'
-import LoginPage from "./pages/LoginPage.vue";
-import AdminPage from "./pages/AdminPage.vue";
+import AdminPage from "./pages/admin/AdminPage.vue";
+import LoginPage from "./pages/admin/LoginPage.vue";
+import AdminSurvey from "./pages/admin/AdminSurvey.vue";
+import AdminAnswer from "./pages/admin/AdminAnswer.vue";
 
 
 const router = createRouter({
@@ -12,8 +14,10 @@ const router = createRouter({
         {path: '/', component: HomePage},
         {path: '/survey', component: SurveyPage},
         {path: '/submit_survey', component: ResponsePage},
-        {path: '/login', component: LoginPage},
-        {path: '/admin', component: AdminPage},
+        {path: '/administration', component: AdminPage},
+        {path: '/administration/login', component: LoginPage},
+        {path: '/administration/questionnaire', component: AdminSurvey},
+        {path: '/administration/reponses', component: AdminAnswer},
     ]
   })
 

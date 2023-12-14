@@ -17,7 +17,5 @@ import NavBar from './components/NavBar.vue';
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    margin-top: 2rem;
-    margin-bottom: 4rem;   
   }
 </style>
