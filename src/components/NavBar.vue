@@ -3,7 +3,7 @@
     <nav class="navbar navbar-expand navbar-light">
       <div class="container">
         <router-link to="/" class="navbar-brand">
-          <img alt="Bigscreen logo" class="logo" src="src/assets/bigscreen.svg" width="200" />
+          <img alt="Bigscreen logo" class="logo" src="public/bigscreen.svg" />
         </router-link>
         <div class="collapse navbar-collapse">
         </div>
@@ -24,7 +24,7 @@ const store = useNavbarStore();
   #main-header{
     background-color: var(--body-color);
     width: 100dvw;
-    height: 15dvh;
+    min-height: 15dvh;
     display: flex;
     align-items: center;
     justify-content: center;
