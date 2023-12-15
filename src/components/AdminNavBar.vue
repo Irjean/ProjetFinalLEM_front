@@ -17,7 +17,7 @@
                 </ul>
             </nav>
         </div>
-        <button id="logout-btn">Se déconnecter</button>
+        <router-link to="/administration/login"><button id="logout-btn">Se déconnecter</button></router-link>
     </section>
 </template>
 
@@ -27,7 +27,7 @@
 
 <style>
     #admin-sidebar{
-        width: 15%;
+        width: 15dvw;
         height: 100%;
         border-right: 1px solid black;
         display: flex;

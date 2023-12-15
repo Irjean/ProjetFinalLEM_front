@@ -27,11 +27,11 @@ let loaded = ref(false);
 let profileAnswer = ref([]);
 
 onMounted(async () => {
-    await fetchAnswers();
     if(!storeQuestion.isFetched){
         await fetchQuestions();
         storeQuestion.isFetched = true;
     }
+    await fetchAnswers();
     loaded.value = true;
 })
 

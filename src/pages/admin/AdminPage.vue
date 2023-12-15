@@ -236,7 +236,7 @@ function sortAnswers(){
         align-items: center;
         justify-content: space-evenly;
         flex-wrap: wrap;
-        width: 85%;
+        width: 85dvw;
         padding: 50px 0;
     }
 

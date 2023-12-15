@@ -56,7 +56,7 @@ onMounted(async () => {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 100%;
+        width: 85dvw;
         height: 100%;
         gap: 20px;
     }
@@ -67,5 +67,9 @@ onMounted(async () => {
     table th, table td{
         border: 1px solid black;
         padding-left: 5px;
+    }
+
+    table th{
+        font-weight: 700;
     }
 </style>

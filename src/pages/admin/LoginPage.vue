@@ -49,7 +49,7 @@
         justify-content: space-between;
         height: 35dvh;
         width: 25dvw;
-        padding-bottom: 20px;
+        padding: 30px 0;
     }
 
     form h2{
