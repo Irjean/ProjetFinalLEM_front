@@ -6,9 +6,9 @@
       <form action="http://127.0.0.1/submit_survey" id="survey-form" class="form-survey">
         <div v-for="(question,index) in storeQuestion.questions" :key="index">
           <SurveyQuestion
-            
             :index="index"
             :question="question"
+            @question-answered="handleQuestionAnswered"
             :questionCount="storeQuestion.questions.length"
           />
         </div>
@@ -24,18 +24,15 @@
         </button>
       </form>
 
-      
-      
-
-      <div v-if="showOverlay" class="overlay" @click="closeOverlay">
-        <div v-if="showMessage" class="popup show">
+      <div v-if="showOverlay" class="overlay">
+        <div class="popup show">
           <a @click="closeMessage" class="close" href="#popup1"><i class="bi bi-x-lg"></i></a>
 
           <p>Toute l'équipe de Bigscreen vous remercie pour votre engagement. Grâce à votre investissement, nous vous préparons une application toujours plus facile à utiliser, seul ou en famille. 
           <br>
-          Si vous désirez consulter vos réponse ultérieurement, vous pouvez consultez cette adresse: 
+          Si vous désirez consulter vos réponse ultérieurement, vous pouvez suivre ce lien :
           <br>
-          URL postResponses
+          <router-link :to="profileLink">Consultez votre réponses</router-link>
           </p>
         </div>
       </div>
@@ -47,16 +44,15 @@
 <script setup>
 import SurveyQuestion from '../components/survey/SurveyQuestion.vue';
 import axios from 'axios';
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted } from "vue";
 import { useNavbarStore } from "../stores/navbar";
 import { useAnswerStore } from "../stores/answer";
 import { useQuestionStore } from '../stores/question';
 
-let loading = ref(true);
-let questions = ref([]);
-let showMessage = ref(false);
+let loaded = ref(false);
 let showOverlay = ref(false);
 let allQuestionsAnswered = ref(false);
+let profileLink = ref("");
 
 const storeNavbar = useNavbarStore();
 const storeQuestion = useQuestionStore();
@@ -69,6 +65,7 @@ onMounted(() => {
   if(!storeQuestion.isFetched){
     fetchQuestions();
   }
+  loaded.value = true;
 });
 
 function fetchQuestions(){
@@ -89,8 +86,10 @@ function submitSurvey() {
   axios.post("/api/answer", {
     answers: arr
   })
-  .then(res => console.log(res));
-
+  .then(res => {
+    profileLink.value = "/reponse/" + res.data.profile.uid;
+    showOverlay.value = true;
+  });
 }
 
 function handleQuestionAnswered(answer) {
@@ -99,15 +98,12 @@ function handleQuestionAnswered(answer) {
   } else {
     answers[answer.number-1] = answer;
   }
-  console.log(answers);
-  console.log(questionCount);
   let answerErrors = answers.filter(answer => answer === false);
   allQuestionsAnswered = answerErrors.length === 0 && Object.keys(answers).length === questionCount
 }
 
 function closeMessage() {
   showOverlay = false;
-  showMessage = false; 
 }
 
 </script>

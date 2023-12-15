@@ -6,7 +6,7 @@
         </div>
 
         <div class="form-answer-text">
-            <div  v-if="question.type == 'A'" class="dotted">
+            <div  v-if="question.type == 'A'">
                 <div v-for="(choice, ind) in choices" class="form-check">
                     <input :id="ind + 'question' + (index + 1)" :name="ind + 'question' + (index + 1)" v-model="selectedValue" :value="choice" type="radio" class="form-check-input" required>
                     <label :for="ind + 'question' + (index + 1)">{{ choice }}</label>
@@ -220,11 +220,6 @@ function checkAnswered () {
 
     .error-text {
         color: var(--error-color);
-    }
-
-    .dotted {
-        border: 1px dotted var(--primary-color);
-        padding: 10px;
     }
 
 

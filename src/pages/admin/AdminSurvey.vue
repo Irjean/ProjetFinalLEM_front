@@ -41,7 +41,6 @@ onMounted(async () => {
         .then(res => {
             storeQuestion.questions = res.data;
             storeQuestion.isFetched = true;
-            console.log(storeQuestion.questions)
             loaded.value = true;
         });
         return
