@@ -1,9 +1,9 @@
 <template>
-  <header>
+  <header id="main-header" v-if="store.isNavbarVisible">
     <nav class="navbar navbar-expand navbar-light">
       <div class="container">
         <router-link to="/" class="navbar-brand">
-          <img alt="Bigscreen logo" class="logo" src="public/bigscreen.svg" />
+          <img alt="Bigscreen logo" class="logo" src="../assets/bigscreen.svg" />
         </router-link>
         <div class="collapse navbar-collapse">
         </div>
@@ -12,8 +12,16 @@
   </header>
 </template>
 
+<script setup>
+import { useNavbarStore } from '../stores/navbar';
+
+const store = useNavbarStore();
+
+</script>
+
 <style>
-  header{
+/* Navbar principal */
+  #main-header{
     background-color: var(--body-color);
     width: 100dvw;
     min-height: 15dvh;
@@ -22,13 +30,18 @@
     justify-content: center;
   }
 
+  #main-header nav, .container, .container a{
+    width: 100%;
+    height: 100%;
+  }
 
-  nav a {
+
+  #main-header nav a {
     display: flex;
     justify-content: center;
   }
-  nav img {
-    width: 90%;
+  #main-header nav img {
+    width: 30%;
   }
 
  /* Desktop */

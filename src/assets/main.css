@@ -37,6 +37,10 @@
   font-weight: normal;
 }
 
+html{
+  height: auto;
+}
+
 body {
   background-color: var(--gray-300-color);
   color: var(--body-color);

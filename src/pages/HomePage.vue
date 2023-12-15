@@ -1,5 +1,4 @@
 <template>
-
   <div class="greetings">
     <p>
       Bigscreen est une entreprise qui développe une application VR permettant aux utilisateurs de regarder en VR des films, émissions TV et jeux vidéos sur un écran géant virtuel, seul ou à plusieur.
@@ -15,15 +14,15 @@
 </template>
 
 
-<script>
-import NavBar from '../components/NavBar.vue';
+<script setup>
+import { onMounted } from "vue";
+import { useNavbarStore } from '../stores/navbar';
 
-export default {
-  name: "HomePage",
-  components: {
-    NavBar
-  },
-}
+const store = useNavbarStore();
+
+onMounted(() => {
+  store.showNavbar();
+});
 </script>
 
 <style scoped>

@@ -4,12 +4,12 @@
       <p>Merci de répondre à toutes les questions et de valider le formulaire en bas de page.</p>
       
       <form action="http://127.0.0.1/submit_survey" id="survey-form" class="form-survey">
-        <div v-for="(question,index) in questions" :key="index">
+        <div v-for="(question,index) in storeQuestion.questions" :key="index">
           <SurveyQuestion
             :index="index"
             :question="question"
-            :questionCount="questions.length"
             @question-answered="handleQuestionAnswered"
+            :questionCount="storeQuestion.questions.length"
           />
         </div>
        
@@ -45,7 +45,9 @@
 import SurveyQuestion from '../components/survey/SurveyQuestion.vue';
 import axios from 'axios';
 import { ref, onMounted, watch } from "vue";
+import { useNavbarStore } from "../stores/navbar";
 import { useAnswerStore } from "../stores/answer";
+import { useQuestionStore } from '../stores/question';
 
 let loading = ref(true);
 let questions = ref([]);
@@ -53,17 +55,25 @@ let showMessage = ref(false);
 let showOverlay = ref(false);
 let allQuestionsAnswered = ref(false);
 
-const store = useAnswerStore();
+const storeNavbar = useNavbarStore();
+const storeQuestion = useQuestionStore();
+const storeAnswer = useAnswerStore();
 
 onMounted(() => {
-  store.$reset();
+  storeNavbar.showNavbar();
+  storeAnswer.formAnswers = [];
   axios.get("sanctum/csrf-cookie");
-  fetchQuestions();
+  if(!storeQuestion.isFetched){
+    fetchQuestions();
+  }
 });
 
 function fetchQuestions(){
   axios.get('/api/questions')
-  .then(response => questions.value = response.data)
+  .then(response => {
+    storeQuestion.questions = response.data;
+    storeQuestion.isFetched = true;
+  })
   .catch(error => {
     console.error('Erreur lors de la récupération des questions du sondage', error);
   });
@@ -72,7 +82,7 @@ function fetchQuestions(){
 function submitSurvey() {
   // Logique pour traiter les réponses du sondage (axios...)
 
-  const arr = store.answers.filter(n => n);
+  const arr = storeAnswer.formAnswers.filter(n => n);
   axios.post("/api/answer", {
     answers: arr
   })
@@ -98,85 +108,6 @@ function closeMessage() {
 
 </script>
   
-<script>
-/*
-import SurveyQuestion from '../components/survey/SurveyQuestion.vue';
-import axios from 'axios';
-  
-export default {
-  components: {
-    SurveyQuestion
-  },
-
-  data(){
-    return {
-      loading: true,
-      questions: [],
-      questionCount: 0,
-      showMessage: false,
-      showOverlay: false,
-      allQuestionsAnswered: false,
-      answers: [],
-    };
-  },
-
-  mounted(){
-    this.fetchQuestions();
-  },
-
-  methods: {
-    fetchQuestions(){
-      axios.get('/api/questions')
-      .then(response => {
-        this.questions = response.data;
-        window.console.log(this.questions);
-        this.loading = false;
-        this.questionCount = this.questions.length;
-        
-      })
-      .catch(error => {
-        console.error('Erreur lors de la récupération des questions du sondage', error);
-      });
-    },
-
-    handleQuestionAnswered(answer) {
-      if(answer.error) {
-        this.answers[answer.number-1] = false;
-      } else {
-        this.answers[answer.number-1] = answer;
-      }
-
-      let answerErrors = this.answers.filter(answer => answer === false);
-      this.allQuestionsAnswered = answerErrors.length === 0 && Object.keys(this.answers).length === this.questionCount
-    },
-
-    submitSurvey() {
-      // Logique pour traiter les réponses du sondage (axios...)
-      // const form = document.getElementById("survey-form");
-      // const formBtn = document.getElementById("survey-btn");
-      // const formData = new FormData(form, formBtn);
-
-      // for(const [key, value] of formData){
-      //   console.log(key + " " + value)
-      // }
-
-
-      const form = document.querySelector("form");
-
-    },
-    closeOverlay() {
-      // Fermer la div overlay
-      this.showOverlay = false;
-      this.showMessage = false;
-    },
-    closeMessage() {
-      this.showOverlay = false;
-      this.showMessage = false; 
-    },
-  },
-};*/
-</script>
-  
 <style scoped>
   
   h1{
@@ -193,7 +124,11 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 3rem;
-    padding-bottom: 4rem;
+    padding: 50px 0
+  }
+
+  form{
+    padding-bottom: 50px;
   }
 
   .popup {
