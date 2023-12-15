@@ -19,11 +19,14 @@
     import { onMounted, ref } from "vue";
     import axios from "axios";
     import router from "../../router.js";
+    import { useNavbarStore } from "../../stores/navbar";
 
     const email = ref();
     const password = ref();
+    const store = useNavbarStore();
 
     onMounted(() => {
+        store.showNavbar();
         axios.get("sanctum/csrf-cookie")
     });
 
@@ -33,7 +36,7 @@
             password: password.value
         }).then(res => {
             if(res.status == 200){
-                router.push("/admin");
+                router.push("/administration");
             }
         })
     }

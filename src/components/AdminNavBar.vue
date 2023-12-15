@@ -1,7 +1,7 @@
 <template>
     <section id="admin-sidebar">
         <div class="nav-container">
-            <img src="/bigscreen.svg" alt="Bigscreen logo">
+            <router-link to="/"><img src="/bigscreen.svg" alt="Bigscreen logo"></router-link>
             <div class="stick"></div>
             <nav>
                 <ul>
@@ -36,6 +36,13 @@
         justify-content: space-around;
         padding: 0px;
         background-color: black;
+    }
+
+    #admin-sidebar a{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
     }
 
     .stick{
