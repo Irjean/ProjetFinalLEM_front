@@ -23,6 +23,7 @@
            Envoyer
           </button>
           <Loading v-if="sendingAnswer"/>
+          <span v-if="error.isError">{{ error.message }}</span>
         </div>
       </form>
 
@@ -32,9 +33,9 @@
 
           <p>Toute l'équipe de Bigscreen vous remercie pour votre engagement. Grâce à votre investissement, nous vous préparons une application toujours plus facile à utiliser, seul ou en famille. 
           <br>
-          Si vous désirez consulter vos réponse ultérieurement, vous pouvez suivre ce lien :
+          Si vous désirez consulter vos réponses ultérieurement, vous pouvez suivre ce lien :
           <br>
-          <router-link :to="profileLink">Consultez votre réponses</router-link>
+          <router-link :to="profileLink">http://localhost:5173{{profileLink}}</router-link>
           </p>
         </div>
       </div>
@@ -57,6 +58,10 @@ let sendingAnswer = ref(false);
 let showOverlay = ref(false);
 let allQuestionsAnswered = ref(false);
 let profileLink = ref("");
+let error = ref({
+  message: "",
+  isError: false
+})
 
 const storeNavbar = useNavbarStore();
 const storeQuestion = useQuestionStore();
@@ -92,6 +97,7 @@ watch(storeAnswer.formAnswers, (newValue) => {
 function submitSurvey() {
   // Logique pour traiter les réponses du sondage (axios...)
   sendingAnswer.value = true;
+  error.value.isError = false;
   const arr = storeAnswer.formAnswers.filter(n => n);
   axios.post("/api/answer", {
     answers: arr
@@ -101,10 +107,12 @@ function submitSurvey() {
     profileLink.value = "/reponse/" + res.data.profile.uid;
     showOverlay.value = true;
   })
-  .catch(error => {
+  .catch(msg => {
     sendingAnswer.value = false;
     showOverlay.value = false;
-    console.error(error);
+    error.value.isError = true;
+    error.value.message = msg.response.data.message;
+    console.error(msg.response.data.message);
   });
 }
 
