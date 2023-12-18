@@ -55,7 +55,7 @@
             
             
             <div :id="'question' + index +1" type="number" v-if="question.type == 'C'" class="number-answer" >
-                <div v-if="question.content.includes('Aimeriez') && question.content.includes('vous')">
+                <div v-if="question.content.includes('Aimeriez') && question.content.includes('vous')" class="label-note">
                     Pas du tout d'accord
                 </div>
 
