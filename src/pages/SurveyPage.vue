@@ -3,25 +3,27 @@
       <h1>Page de Sondage</h1>
       <p>Merci de répondre à toutes les questions et de valider le formulaire en bas de page.</p>
       
+      <Loading v-if="loaded == false"/>
       <form action="http://127.0.0.1/submit_survey" id="survey-form" class="form-survey">
         <div v-for="(question,index) in storeQuestion.questions" :key="index">
           <SurveyQuestion
             :index="index"
             :question="question"
-            @question-answered="handleQuestionAnswered"
             :questionCount="storeQuestion.questions.length"
           />
         </div>
-       
-        <button @click.prevent="submitSurvey" 
-          :disabled="allQuestionsAnswered" 
-          id="survey-btn" 
-          class="button-large" 
-          :class=" {'btn-disabled': !allQuestionsAnswered}" 
-          type="submit">
-          <img src="/picto/send.png" alt="logo">
-          Envoyer
-        </button>
+        <div class="btn-container">
+         <button @click.prevent="submitSurvey" 
+           :disabled="!storeAnswer.allAnswered" 
+           id="survey-btn" 
+           class="button-large" 
+           :class="!storeAnswer.allAnswered ? 'btn-disabled' : ''" 
+           type="submit">
+           <img src="/picto/send.png" alt="logo">
+           Envoyer
+          </button>
+          <Loading v-if="sendingAnswer"/>
+        </div>
       </form>
 
       <div v-if="showOverlay" class="overlay">
@@ -44,12 +46,14 @@
 <script setup>
 import SurveyQuestion from '../components/survey/SurveyQuestion.vue';
 import axios from 'axios';
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useNavbarStore } from "../stores/navbar";
 import { useAnswerStore } from "../stores/answer";
 import { useQuestionStore } from '../stores/question';
+import Loading from "../components/Loading.vue";
 
-let loaded = ref(false);
+let loaded = ref(true);
+let sendingAnswer = ref(false);
 let showOverlay = ref(false);
 let allQuestionsAnswered = ref(false);
 let profileLink = ref("");
@@ -63,14 +67,16 @@ onMounted(() => {
   storeAnswer.formAnswers = [];
   axios.get("sanctum/csrf-cookie");
   if(!storeQuestion.isFetched){
+    loaded.value = false;
     fetchQuestions();
   }
-  loaded.value = true;
+  
 });
 
 function fetchQuestions(){
   axios.get('/api/questions')
   .then(response => {
+    loaded.value = true;
     storeQuestion.questions = response.data;
     storeQuestion.isFetched = true;
   })
@@ -79,31 +85,31 @@ function fetchQuestions(){
   });
 }
 
+watch(storeAnswer.formAnswers, (newValue) => {
+  console.log(newValue);
+});
+
 function submitSurvey() {
   // Logique pour traiter les réponses du sondage (axios...)
-
+  sendingAnswer.value = true;
   const arr = storeAnswer.formAnswers.filter(n => n);
   axios.post("/api/answer", {
     answers: arr
   })
   .then(res => {
+    sendingAnswer.value = false;
     profileLink.value = "/reponse/" + res.data.profile.uid;
     showOverlay.value = true;
+  })
+  .catch(error => {
+    sendingAnswer.value = false;
+    showOverlay.value = false;
+    console.error(error);
   });
 }
 
-function handleQuestionAnswered(answer) {
-  if(answer.error) {
-    answers[answer.number-1] = false;
-  } else {
-    answers[answer.number-1] = answer;
-  }
-  let answerErrors = answers.filter(answer => answer === false);
-  allQuestionsAnswered = answerErrors.length === 0 && Object.keys(answers).length === questionCount
-}
-
 function closeMessage() {
-  showOverlay = false;
+  showOverlay.value = false;
 }
 
 </script>
@@ -131,6 +137,17 @@ function closeMessage() {
     padding-bottom: 50px;
   }
 
+  #survey-btn{
+    background-color: #00bd7e; 
+  }
+
+  #survey-btn:hover{
+        background-color: #02a871;
+    }
+
+    #survey-btn:active{
+        background-color: #028559;
+    }
   .popup {
     position: fixed;
     top: 50%;
@@ -173,8 +190,15 @@ function closeMessage() {
     z-index: 999; 
   }
 
+  .btn-container{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 50px;
+  }
+
   .btn-disabled {
-    background-color: var(--gray-color);
+    background-color: var(--gray-color) !important;
   }
   
 

@@ -1,6 +1,9 @@
 <template>
     <div id="admin-container">
         <AdminNavBar />
+        <div class="loading-container">
+            <Loading v-if="!loaded"/>
+        </div>
         <section id="home-admin" v-if="loaded">
             <div class="chart-container">
                 <h2>Matériel VR utilisé</h2>
@@ -30,14 +33,18 @@
 
 <script setup>
 import AdminNavBar from "../../components/AdminNavBar.vue";
+import Loading from "../../components/Loading.vue";
 import { onMounted, ref } from "vue";
+import { useAdminStore } from "../../stores/admin";
 import { useNavbarStore } from "../../stores/navbar";
 import { useQuestionStore } from "../../stores/question";
 import { useAnswerStore } from "../../stores/answer";
 import { Chart as ChartJS, Title, CategoryScale, ArcElement, Tooltip, Legend, Filler, LineElement, PointElement, RadialLinearScale } from 'chart.js';
 import { Pie, Radar } from 'vue-chartjs';
 import axios from "axios";
+import router from "../../router";
 
+const storeAdmin = useAdminStore();
 const storeNavbar = useNavbarStore();
 const storeQuestion = useQuestionStore();
 const storeAnswer = useAnswerStore();
@@ -134,6 +141,9 @@ let chartTitles = ref({
 })
 
 onMounted(async () => {
+    if(!storeAdmin.isAdmin){
+       router.push("/administration/login");
+    }
     storeNavbar.hideNavbar();
     if(!storeQuestion.isFetched){
         await getQuestions();
@@ -180,15 +190,15 @@ function sortAnswers(){
     storeAnswer.answers.forEach(answer => {
         switch(answer.question_id){
             case 6:
-                isNaN(chartData.value.question6[dataQuestion6.value.labels.indexOf(answer.content)]) ? chartData.value.question6[dataQuestion6.value.labels.indexOf(answer.content)] = 0 : chartData.value.question6[dataQuestion6.value.labels.indexOf(answer.content)] = chartData.value.question6[dataQuestion6.value.labels.indexOf(answer.content)] + 1;
+                isNaN(chartData.value.question6[dataQuestion6.value.labels.indexOf(answer.content)]) ? chartData.value.question6[dataQuestion6.value.labels.indexOf(answer.content)] = 1 : chartData.value.question6[dataQuestion6.value.labels.indexOf(answer.content)] = chartData.value.question6[dataQuestion6.value.labels.indexOf(answer.content)] + 1;
                 dataQuestion6.value.datasets[0].data = chartData.value.question6;
                 break;
             case 7:
-                isNaN(chartData.value.question7[dataQuestion7.value.labels.indexOf(answer.content)]) ? chartData.value.question7[dataQuestion7.value.labels.indexOf(answer.content)] = 0 : chartData.value.question7[dataQuestion7.value.labels.indexOf(answer.content)] = chartData.value.question7[dataQuestion7.value.labels.indexOf(answer.content)] + 1;
+                isNaN(chartData.value.question7[dataQuestion7.value.labels.indexOf(answer.content)]) ? chartData.value.question7[dataQuestion7.value.labels.indexOf(answer.content)] = 1 : chartData.value.question7[dataQuestion7.value.labels.indexOf(answer.content)] = chartData.value.question7[dataQuestion7.value.labels.indexOf(answer.content)] + 1;
                 dataQuestion7.value.datasets[0].data = chartData.value.question7;
                 break;
             case 10:
-                isNaN(chartData.value.question10[dataQuestion10.value.labels.indexOf(answer.content)]) ? chartData.value.question10[dataQuestion10.value.labels.indexOf(answer.content)] = 0 : chartData.value.question10[dataQuestion10.value.labels.indexOf(answer.content)] = chartData.value.question10[dataQuestion10.value.labels.indexOf(answer.content)] + 1;
+                isNaN(chartData.value.question10[dataQuestion10.value.labels.indexOf(answer.content)]) ? chartData.value.question10[dataQuestion10.value.labels.indexOf(answer.content)] = 1 : chartData.value.question10[dataQuestion10.value.labels.indexOf(answer.content)] = chartData.value.question10[dataQuestion10.value.labels.indexOf(answer.content)] + 1;
                 dataQuestion10.value.datasets[0].data = chartData.value.question10;
                 break;
             case 11:
@@ -249,4 +259,10 @@ function sortAnswers(){
         height: 48%;
     }
 
+    .loading-container{
+        position: absolute;
+        top: 50%;
+        left: 60%;
+        transform: translate(-50%, -50%);
+    }
 </style>

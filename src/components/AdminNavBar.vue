@@ -17,12 +17,18 @@
                 </ul>
             </nav>
         </div>
-        <router-link to="/administration/login"><button id="logout-btn">Se déconnecter</button></router-link>
+        <router-link @click="logout" to="/administration/login"><button id="logout-btn">Se déconnecter</button></router-link>
     </section>
 </template>
 
 <script setup>
-    
+import { useAdminStore } from "../stores/admin";
+
+const admin = useAdminStore();
+
+function logout(){
+    admin.isAdmin = false;
+}
 </script>
 
 <style>

@@ -1,4 +1,7 @@
 <template>
+    <div class="loading-container">
+        <Loading v-if="!loaded"/>
+    </div>
     <div class="container" v-if="loaded">
         <h1>Vous trouverez ci-dessous les réponses que vous avez apporté à notre sondage.</h1>
         <div>
@@ -16,6 +19,7 @@
 <script setup>
 import axios from 'axios';
 import SurveyAnswer from '../components/survey/SurveyAnswer.vue';
+import Loading from '../components/Loading.vue';
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useQuestionStore } from "../stores/question";
@@ -58,5 +62,9 @@ async function fetchQuestions() {
     .container{
         margin-top: 30px;
         width: 50%;
+    }
+
+    .loading-container{
+        margin-top: 50px;
     }
 </style>

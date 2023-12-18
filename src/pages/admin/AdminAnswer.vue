@@ -1,6 +1,9 @@
 <template>
     <div id="admin-container">
         <AdminNavBar />
+        <div class="loading-container">
+            <Loading v-if="!loaded"/>
+        </div>
         <section id="answer-admin" v-if="loaded">
             <h2>Réponses du questionnaire</h2>
             <div class="tables-container">
@@ -26,12 +29,16 @@
 </template>
 <script setup>
 import AdminNavBar from '../../components/AdminNavBar.vue';
+import Loading from '../../components/Loading.vue';
 import axios from "axios";
 import { ref, onMounted } from "vue";
 import { useNavbarStore } from "../../stores/navbar";
 import { useAnswerStore } from '../../stores/answer';
 import { useQuestionStore } from '../../stores/question';
+import { useAdminStore } from "../../stores/admin";
+import router from '../../router';
 
+const storeAdmin = useAdminStore();
 const storeNavbar = useNavbarStore();
 const storeAnswer = useAnswerStore();
 const storeQuestion = useQuestionStore();
@@ -40,6 +47,9 @@ let loaded = ref(false);
 let sortedAnswers = ref([]);
 
 onMounted(async () => {
+    if(!storeAdmin.isAdmin){
+        router.push("/administration/login");
+    }
     storeNavbar.hideNavbar();
     if(!storeQuestion.isFetched){
         await getQuestions();
@@ -130,5 +140,12 @@ function sortAnswers(arr){
 
     .table-three{
         width: 32%;
+    }
+
+    .loading-container{
+        position: absolute;
+        top: 50%;
+        left: 60%;
+        transform: translate(-50%, -50%);
     }
 </style>
