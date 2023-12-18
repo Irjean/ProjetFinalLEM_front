@@ -101,7 +101,7 @@ import { useAnswerStore } from "../../stores/answer";
 const props = defineProps([
     "question",
     "questionCount",
-    "index"
+    "index",
 ]);
 
 const store = useAnswerStore();
@@ -116,8 +116,8 @@ watch(selectedValue, (newValue) => {
     if(newValue.length < 1){
         return
     }
-
     store.addAnswer(props.question.id, selectedValue);
+    store.checkFormAnswer();
 })
 
 function checkEmail () {

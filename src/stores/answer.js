@@ -6,6 +6,7 @@ export const useAnswerStore = defineStore('answer', {
         answers : [],
         formAnswers: [],
         isFetched: false,
+        allAnswered: false,
     }
   },
   actions: {
@@ -15,5 +16,8 @@ export const useAnswerStore = defineStore('answer', {
         answer,
       }
     },
+    checkFormAnswer(){
+      this.formAnswers.length < 20 ? this.allAnswered = false : this.allAnswered = true;
+    }
   },
 })

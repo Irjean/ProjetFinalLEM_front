@@ -17,17 +17,23 @@
                 </ul>
             </nav>
         </div>
-        <button id="logout-btn">Se déconnecter</button>
+        <router-link @click="logout" to="/administration/login"><button id="logout-btn">Se déconnecter</button></router-link>
     </section>
 </template>
 
 <script setup>
-    
+import { useAdminStore } from "../stores/admin";
+
+const admin = useAdminStore();
+
+function logout(){
+    admin.isAdmin = false;
+}
 </script>
 
 <style>
     #admin-sidebar{
-        width: 15%;
+        width: 15dvw;
         height: 100%;
         border-right: 1px solid black;
         display: flex;

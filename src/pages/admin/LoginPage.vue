@@ -11,7 +11,9 @@
                 <input type="password" name="password" id="password" v-model="password" required>
             </div>
         </div>
+        <span v-if="showError" class="error-msg">Les identifiants ne correspondent pas.</span>
         <button type="submit" @click="login">Login</button>
+        <Loading v-if="loading"/>
     </form>
 </template>
 
@@ -20,10 +22,15 @@
     import axios from "axios";
     import router from "../../router.js";
     import { useNavbarStore } from "../../stores/navbar";
+    import { useAdminStore } from "../../stores/admin";
+    import Loading from "../../components/Loading.vue";
 
     const email = ref();
     const password = ref();
+    let loading = ref(false);
+    let showError = ref(false);
     const store = useNavbarStore();
+    const adminStore = useAdminStore();
 
     onMounted(() => {
         store.showNavbar();
@@ -31,13 +38,22 @@
     });
 
     const login = async () => {
+        loading.value = true;
+        showError.value = false;
         axios.post("/api/login", {
             email: email.value,
             password: password.value
         }).then(res => {
+            loading.value = false;
             if(res.status == 200){
+                adminStore.isAdmin = true;
                 router.push("/administration");
             }
+        })
+        .catch(error => {
+            loading.value = false;
+            showError.value = true;
+            console.error(error);
         })
     }
 </script>
@@ -49,7 +65,7 @@
         justify-content: space-between;
         height: 35dvh;
         width: 25dvw;
-        padding-bottom: 20px;
+        padding: 30px 0;
     }
 
     form h2{
@@ -90,6 +106,7 @@
         padding: 10px 25px;
         font-size: 1.1rem;
         cursor: pointer;
+        margin-bottom: 50px;
     }
 
     form button:hover{
@@ -98,5 +115,10 @@
 
     form button:active{
         background-color: #028559;
+    }
+
+    .error-msg{
+        color: red;
+        margin-bottom: 10px;
     }
 </style>
