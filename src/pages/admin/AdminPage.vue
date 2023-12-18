@@ -259,10 +259,37 @@ function sortAnswers(){
         height: 48%;
     }
 
+    canvas{
+            width: 350px !important;
+            height: 350px !important;
+        }
+
     .loading-container{
         position: absolute;
         top: 50%;
         left: 60%;
         transform: translate(-50%, -50%);
+    }
+
+    @media screen and (max-width: 1200px) {
+        canvas{
+            width: 250px !important;
+            height: 250px !important;
+        }
+    }
+
+    @media screen and (max-width: 730px) {
+        #home-admin{
+            width: 70dvw;
+            flex-direction: column;
+            justify-content: flex-start;
+            flex-wrap: nowrap;
+            overflow-y:scroll;
+            gap: 50px;
+        }
+
+        .chart-container{
+        width: 100%;
+        }
     }
 </style>

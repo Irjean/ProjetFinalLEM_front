@@ -79,4 +79,10 @@ function logout(){
         font-weight: 700;
         text-decoration: underline;
     }
+
+    @media screen and (max-width: 730px) {
+        #admin-sidebar{
+            width: 30dvw;
+        }
+    }
 </style>

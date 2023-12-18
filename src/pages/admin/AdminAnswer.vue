@@ -148,4 +148,10 @@ function sortAnswers(arr){
         left: 60%;
         transform: translate(-50%, -50%);
     }
+
+    @media screen and (max-width: 730px) {
+        #answer-admin{
+            width: 70dvw;
+        }
+    }
 </style>

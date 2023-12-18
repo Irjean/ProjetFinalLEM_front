@@ -121,4 +121,16 @@
         color: red;
         margin-bottom: 10px;
     }
+
+    @media screen and (max-width: 1100px) {
+        form{
+            width: 40%;
+        }
+    }
+
+    @media screen and (max-width: 700px) {
+        form{
+            width: 70%;
+        }
+    }
 </style>

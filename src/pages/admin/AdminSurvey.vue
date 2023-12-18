@@ -100,4 +100,13 @@ onMounted(async () => {
         left: 60%;
         transform: translate(-50%, -50%);
     }
+
+    @media screen and (max-width: 730px) {
+        #survey-admin{
+            width: 70dvw;
+            overflow-y: scroll;
+            justify-content: flex-start;
+            padding: 20px 10px;
+        }
+    }
 </style>
