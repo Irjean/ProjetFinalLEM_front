@@ -23,7 +23,7 @@
            Envoyer
           </button>
           <Loading v-if="sendingAnswer"/>
-          <span v-if="error.isError">{{ error.message }}</span>
+          <span class="error-msg" v-if="error.isError">{{ error.message }}</span>
         </div>
       </form>
 
@@ -207,6 +207,10 @@ function closeMessage() {
 
   .btn-disabled {
     background-color: var(--gray-color) !important;
+  }
+
+  .error-msg{
+    color: red;
   }
   
 
