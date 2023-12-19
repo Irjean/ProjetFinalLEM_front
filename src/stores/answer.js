@@ -17,7 +17,7 @@ export const useAnswerStore = defineStore('answer', {
       }
     },
     checkFormAnswer(){
-      this.formAnswers.length < 20 ? this.allAnswered = false : this.allAnswered = true;
+      this.formAnswers.length < 21 ? this.allAnswered = false : this.allAnswered = true;
     }
   },
 })
