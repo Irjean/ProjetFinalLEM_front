@@ -8,7 +8,7 @@
 
 <script setup>
 import NavBar from './components/NavBar.vue';
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/vue"
 </script>
 
 <style scoped>
