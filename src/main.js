@@ -8,7 +8,7 @@ import { inject } from "@vercel/analytics";
 
 const pinia = createPinia()
 const app = createApp(App);
-inject();
 app.use(pinia);
 app.use(router);
 app.mount('#app');
+inject();
