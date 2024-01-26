@@ -11,8 +11,7 @@ import NavBar from './components/NavBar.vue';
 import { SpeedInsights } from "@vercel/speed-insights/vue"
 import { inject } from "@vercel/analytics";
 
-inject();
-console.log("test");
+inject({mode: "production"});
 </script>
 
 <style scoped>
