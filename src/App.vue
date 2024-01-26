@@ -2,16 +2,13 @@
   <NavBar />
   <main>
     <router-view />
-  </main>
-  <SpeedInsights />
+  </main>  
+
 </template>
 
 <script setup>
 import NavBar from './components/NavBar.vue';
-import { SpeedInsights } from "@vercel/speed-insights/vue"
-import { inject } from "@vercel/analytics";
-
-inject({mode: "production"});
+  
 </script>
 
 <style scoped>
