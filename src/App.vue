@@ -2,13 +2,13 @@
   <NavBar />
   <main>
     <router-view />
-  </main>  
-
+  </main>
+  <SpeedInsights />
 </template>
 
 <script setup>
 import NavBar from './components/NavBar.vue';
-  
+import { SpeedInsights } from "@vercel/speed-insights/next"
 </script>
 
 <style scoped>
